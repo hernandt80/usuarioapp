@@ -1,0 +1,49 @@
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <link rel="icon" href="{{ url_for('static', filename='img/tota_icon.ico') }}">
+        <link rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://getbootstrap.com/examples/navbar-static-top/navbar-static-top.css">
+        <link rel="stylesheet" href="http://getbootstrap.com/examples/sticky-footer/sticky-footer.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+        <title>Sistema La Tota 2017</title>
+
+    </head>
+
+    <body style="height: 70% !important; min-height: 50% !important;">
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <img style="height: 49px;" src="{{ url_for('static', filename='img/tota.jpg') }}">
+                    <a class="navbar-brand" href="#" style="float: right;">Sistema La Tota 2017</a>
+                </div>
+
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="/register">Registro</a></li>
+                        <li><a href="/buscar">Buscar</a></li>
+                        <li><a href="/login">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+        <footer class="footer">
+            <div class="container">
+                <p class="copyright text-muted">&copy; La Tota 2017</p>
+            </div>
+        </footer>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}" />
+
+    </body>
+</html>

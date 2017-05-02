@@ -1,0 +1,25 @@
+{% macro show_list_h(value1, value2, value3) %}
+
+    <h1>{{ value1 }}</h1>
+    <h2>{{ value2 }}</h2>
+    <h3>{{ value3 }}</h3>
+
+{% endmacro %}
+
+{% macro render_field(field) %}
+
+    <td>{{ field.label }}</td>
+    <dd>{{ field(**kwargs)|safe }}</dd>
+
+    {% if field.error %}
+        <p>Hay errores!</p>
+        <ul>
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h1>{{ field.error }}</h1>
+
+{% endmacro %}

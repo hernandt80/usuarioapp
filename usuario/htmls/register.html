@@ -1,0 +1,58 @@
+{% extends 'base/layout.html' %}
+
+{% block content %}
+
+{% from "base/_formhelpers.html" import render_field %}
+
+    <div id="content" class="container" style="margin-top: 70px !important">
+
+      <div class="jumbotron">
+
+          <h2 class="form-signin-heading titulo">Formulario registro</h2>
+          <hr style="border-top: 1px solid #555;">
+
+          {% for message in form.username.errors %}
+             <div class="messageerror">{{ message }}</div>
+          {% endfor %}
+
+          {% for message in form.email.errors %}
+             <div class="messageerror">{{ message }}</div>
+          {% endfor %}
+
+          {% for message in form.password.errors %}
+             <div class="messageerror">{{ message }}</div>
+          {% endfor %}
+
+          {% for message in form.confirm.errors %}
+             <div class="messageerror">{{ message }}</div>
+          {% endfor %}
+
+          {% for message in form.accept_tos.errors %}
+             <div class="messageerror">{{ message }}</div>
+          {% endfor %}
+
+        <form class="form-signin" method=post>
+
+            {{ render_field(form.username, type='text', id='inputUsername', class='form-control', placeholder='Username') }}
+
+            {{ render_field(form.email, type="email", id="inputEmail", class="form-control", placeholder="Email address") }}
+
+            {{ render_field(form.password, type="password", id="inputPassword", class="form-control", placeholder="Password") }}
+
+            {{ render_field(form.confirm, type="password", id="inputConfirm", class="form-control", placeholder="Confirm Password") }}
+
+            <div class="checkboxDiv">
+              {{ render_field(form.accept_tos, type="checkbox", class="checkboxButton", value="remember-me") }}
+            </div>
+
+            <hr style="border-top: 1px solid #555;">
+
+            <button class="btn btn-lg btn-primary btn-block submitbutton" type="submit">Registrar</button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+{% endblock %}
