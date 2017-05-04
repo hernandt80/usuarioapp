@@ -1,15 +1,14 @@
-from flask import Flask, flash, url_for
-from flask import render_template
-from flask import request, redirect
-
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
-import form
-import registration
+import forms
 import models
 
+#Configuracion aplicacion
 app = Flask(__name__, template_folder= 'htmls')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:admin@localhost/postgres'
+
+#Configuracion base de datos
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -33,26 +32,27 @@ def hello_world():
     return 'Hello World!!!!'
 
 
-#http://127.0.0.1:5000/params?params1=Hernan
-#http://127.0.0.1:5000/params?params1=Hernan&params2=Latota
 @app.route('/params')
 def params():
+    #http://127.0.0.1:5000/params?params1=Hernan
+    #http://127.0.0.1:5000/params?params1=Hernan&params2=Latota
     param_uno = request.args.get('params1', 'Msg default: no se seteo params1')
     param_dos = request.args.get('params2', 'Msg default: no se seteo params2')
     return 'Los parametros son: {} y {}'.format(param_uno, param_dos)
 
 
-#http://127.0.0.1:5000/usuarios/hernan
 @app.route('/usuarios/')
 @app.route('/usuarios/<name>/')
 @app.route('/usuarios/<name>/<int:edad>')
 def usuarios(name = 'valor default', edad = 0):
+    #http://127.0.0.1:5000/usuarios/hernan
     return 'El nombre y la edad son: {} {}'.format(name, edad)
 
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    #return render_template('index.html')
+    return render_template('index_en_htmls.html')
 
 
 @app.route('/user/<name>', methods = ['GET', 'POST'])
@@ -60,7 +60,7 @@ def user(name='Hernan'):
     age = 36
     my_list = [1, 2, 3, 4]
 
-    comment_form = form.CommentForm(request.form)
+    comment_form = forms.CommentForm(request.form)
     if request.method == 'POST' and comment_form.validate():
         print comment_form.username.data
         print comment_form.email.data
@@ -72,7 +72,7 @@ def user(name='Hernan'):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    formulario = registration.RegistrationForm(request.form)
+    formulario = forms.RegistrationForm(request.form)
 
     if request.method == 'POST' and formulario.validate():
         usuario = User(formulario.username.data,
@@ -101,27 +101,16 @@ def buscar():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
-    formulario = registration.LoginForm(request.form)
+    formulario = forms.LoginForm(request.form)
 
     if request.method == 'POST' and formulario.validate():
         usuario = User.query.filter_by(username=formulario.username.data,
-                                       password=formulario.password.data)
+                                       password=formulario.password.data).one()
 
-        if usuario.first() is not None:
-            return render_template('usuario.html', user=usuario.first())
-        else:
-            return render_template('login.html', form=formulario, mensaje='Usuario no encontrado')
+    if usuario is not None:
+        return render_template('usuario.html', user=usuario)
     else:
-        return render_template('login.html', form=formulario)
-
+        return render_template('.html', form=formulario)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-from database import db_session
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
