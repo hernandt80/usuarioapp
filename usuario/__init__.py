@@ -1,31 +1,12 @@
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-
+from models import db, User
 import forms
-import models
+
 
 #Configuracion aplicacion
 app = Flask(__name__, template_folder= 'htmls')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:admin@localhost/postgres'
-
-#Configuracion base de datos
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    __tablename__ = 'USER'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True)
-    email = db.Column(db.String(60), unique=True)
-    password = db.Column(db.String(15), unique=False)
-
-    def __init__(self, username=None, email=None, password=None):
-        self.username = username
-        self.email = email
-        self.password = password
-
-    def __repr__(self):
-        return '<User %r>' % (self.username)
-
+db.init_app(app)
 
 @app.route('/hello')
 def hello_world():
@@ -52,7 +33,7 @@ def usuarios(name = 'valor default', edad = 0):
 @app.route('/')
 def index():
     #return render_template('index.html')
-    return render_template('index_en_htmls.html')
+    return render_template('home.html')
 
 
 @app.route('/user/<name>', methods = ['GET', 'POST'])
@@ -107,10 +88,13 @@ def login():
         usuario = User.query.filter_by(username=formulario.username.data,
                                        password=formulario.password.data).one()
 
-    if usuario is not None:
-        return render_template('usuario.html', user=usuario)
+        if usuario is not None:
+            return render_template('usuario.html', user=usuario)
+        else:
+            return render_template('login.html', form=formulario)
+
     else:
-        return render_template('.html', form=formulario)
+        return render_template('login.html', form=formulario)
 
 if __name__ == '__main__':
     app.run(debug=True)
