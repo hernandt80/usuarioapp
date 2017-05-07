@@ -2,7 +2,7 @@ from string import Template
 from flask import Blueprint, request, render_template, url_for
 
 from usuario.geo.forms import PlaceForm
-from usuario.hospital.models import Hospital
+from models import Hospital
 
 
 mod_geo = Blueprint('geo', __name__, url_prefix='/geo')
